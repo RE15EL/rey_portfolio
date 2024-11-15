@@ -1,0 +1,6 @@
+{
+    "exportall.config.folderListener": [
+        "/src/components",
+        "/src/components/ui"
+    ]
+}
