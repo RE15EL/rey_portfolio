@@ -16,6 +16,9 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Reisel Valle Portfolio",
   description: "Portfolio v1",
+  icons:{
+    icon: "/favicon.ico",
+  }
 };
 
 export default function RootLayout({
