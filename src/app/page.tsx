@@ -1,5 +1,6 @@
 import {
   About,
+  Experience,
   Footer,
   Hero,
   MaxWidthWrapper,
@@ -15,6 +16,7 @@ export default function Home() {
       <Hero />
       <About />
       <RecentProjects />
+      <Experience />
       <Footer />
     </MaxWidthWrapper>
   );

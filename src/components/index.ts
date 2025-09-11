@@ -1,5 +1,7 @@
 export * from './about';
+export * from './experience';
 export * from './footer';
+export * from './heading-section';
 export * from './heading';
 export * from './hero';
 export * from './logo';

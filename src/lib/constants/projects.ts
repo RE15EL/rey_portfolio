@@ -17,7 +17,7 @@ export const projects: IProject[] = [
   {
     id: 2,
     title: "Taskmind - Video Conferencing App",
-    des: "Portal web para servicios de agendamiento de Vitalmex.",
+    des: "TaskMind es una app web de productividad diseñada para ayudar a los usuarios a gestionar tareas eficientemente.",
     img: "/images/taskmind.png",
     iconLists: [
       "/images/next.svg",
@@ -29,9 +29,9 @@ export const projects: IProject[] = [
   },
   {
     id: 3,
-    title: "AI Image SaaS - Canva Application",
-    des: "A REAL Software-as-a-Service app with AI features and a payments and credits system using the latest tech stack.",
-    img: "/images/art_digital.png",
+    title: "Reto Viral - 12345678",
+    des: "El Reto Viral de 123456789 es un desafío de programación que demuestra la manipulación avanzada de cadenas y matrices mediante patrones visuales de dígitos.",
+    img: "/images/reto_viral.png",
     iconLists: [
       "/images/next.svg",
       "/images/ts.svg",

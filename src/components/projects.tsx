@@ -6,7 +6,9 @@ import { projects } from "@/lib/constants";
 export const RecentProjects = () => {
   return (
     <div id="projects" className="py-20">
-      <h1 className="heading text-golden-100">Explora Mis Proyectos</h1>
+      <h1 className="heading ">
+        Explora <span className="text-golden-100">Mis Proyectos</span>
+      </h1>
 
       {/* projects cards */}
       <div className="flex flex-wrap justify-center items-center p-4 md:gap-x-20 gap-y-4 md:gap-y-0 mt-10">
