@@ -70,7 +70,7 @@ export const TypewriterEffect = ({
     );
   };
   return (
-    <div className={cn("heading", className)}>
+    <div className={cn("heading-sm", className)}>
       {renderWords()}
       <motion.span
         initial={{

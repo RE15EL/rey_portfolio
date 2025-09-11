@@ -4,5 +4,6 @@ export * from './heading';
 export * from './hero';
 export * from './logo';
 export * from './max-width-wrapper';
+export * from './projects';
 export * from './tech-stack-preview';
 export * from './ui';

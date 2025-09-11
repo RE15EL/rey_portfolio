@@ -53,8 +53,8 @@ export const aboutItems = [
     imgClassName: "absolute right-0 bottom-0 md:w-96 w-60",
     titleClassName:
       "justify-center md:justify-start lg:justify-end lg:items-end lg:text-right text-golden-100",
-    img: "/b5.svg",
-    spareImg: "/grid.svg",
+    img: "",
+    spareImg: "/images/grid.svg",
   },
   {
     id: 6,

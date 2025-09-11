@@ -1,10 +1,11 @@
 import {
   About,
-  FloatingNav,
   Footer,
   Hero,
   MaxWidthWrapper,
+  RecentProjects,
 } from "@/components";
+import { FloatingNav } from "@/components/ui";
 import { navItems } from "@/lib/constants";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <FloatingNav navItems={navItems} />
       <Hero />
       <About />
+      <RecentProjects />
       <Footer />
     </MaxWidthWrapper>
   );
