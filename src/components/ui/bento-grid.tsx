@@ -44,9 +44,9 @@ export const BentoGridItem = ({
   const [copied, setCopied] = useState(false);
 
   const defaultOptions = {
-    loop: copied,
+    loop: false,
     autoplay: copied,
-    animationData: animationData,
+    animationData,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
@@ -56,6 +56,7 @@ export const BentoGridItem = ({
     const text = "reiselvalle@gmail.com";
     navigator.clipboard.writeText(text);
     setCopied(true);
+
     // openWhatsapp("58126166", "Hola,Quiero más información!");
   };
 

@@ -87,7 +87,7 @@ function ExpandableCardDemo() {
             <motion.div
               layoutId={`card-${active.title}-${id}`}
               ref={ref}
-              className="w-full max-w-[500px] h-full sm:h-fit md:max-h-[90%] flex flex-col gap-6 justify-center items-center py-4 bg-slate-900/50 sm:rounded-3xl overflow-hidden border border-golden-100 shadow-2xl shadow-golden-100"
+              className="w-full max-w-[500px] h-full sm:h-fit md:max-h-[90%] flex flex-col gap-6 justify-center items-center py-4 bg-slate-900 sm:rounded-3xl overflow-hidden border border-golden-100 shadow-2xl shadow-golden-100"
             >
               <motion.div layoutId={`image-${active.title}-${id}`}>
                 <Image

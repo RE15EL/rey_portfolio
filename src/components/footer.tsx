@@ -10,7 +10,7 @@ export const Footer = () => {
       id="contact"
       className="w-full pt-[6.8rem] md:pt-[9.4rem] pb-20 relative min-h-96 "
     >
-      <div className="w-full absolute left-0 bottom-0 min-h-96">
+      <div className="w-full absolute left-0 bottom-0 min-h-96 z-10">
         <Image
           src="/images/footer-grid.svg"
           alt="footer grid"
@@ -26,7 +26,7 @@ export const Footer = () => {
           Conectemos y Exploremos Juntos el Camino hacia tus Metas.
         </p>
 
-        <Link href="mailto:reiselvalle@gmail.com" className="mt-2">
+        <Link href="mailto:reiselvalle@gmail.com" className="mt-2 z-50">
           <MagicButton
             title="Pongámonos en Contacto"
             type="button"
@@ -46,14 +46,14 @@ export const Footer = () => {
             <Link
               href={link}
               key={id}
-              className="group w-8 h-8 flex justify-center items-center bg-golden-200/50 rounded-lg hover:cursor-pointer transition-all"
+              className="group w-8 h-8 flex justify-center items-center bg-golden-200/50 rounded-lg hover:cursor-pointer transition-colors duration-200 z-50"
             >
               <Image
                 src={img}
                 alt={`${id}`}
                 width={18}
                 height={18}
-                className="transition-all duration-200 ease-in-out group-hover:scale-125"
+                className="cursor-pointer transition-all duration-200 ease-in-out group-hover:scale-125"
               />
             </Link>
           ))}
