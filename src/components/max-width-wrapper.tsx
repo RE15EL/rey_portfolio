@@ -7,5 +7,15 @@ interface MWWProps {
 }
 
 export const MaxWidthWrapper = ({ className, children }: MWWProps) => {
-  return <div className={cn("h-full mx-auto w-full max-w-screen-lg px-2.5 md:px-20",className)}> {children}</div>;
+  return (
+    <div
+      className={cn(
+        "size-full max-w-screen-xl mx-auto px-2.5 md:px-20 relative",
+        className
+      )}
+    >
+      {" "}
+      {children}
+    </div>
+  );
 };

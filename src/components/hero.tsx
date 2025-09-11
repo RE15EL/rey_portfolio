@@ -4,7 +4,7 @@ import { BackgroundBeamsWithCollision, MagicButton } from "./ui";
 
 export const Hero = () => {
   return (
-    <BackgroundBeamsWithCollision className="h-screen grid place-items-center">
+    <BackgroundBeamsWithCollision className="min-h-screen grid place-items-center">
       <div className="max-w-[89vw] md:max-w-2xl lg:max-w-[54vw] grid place-items-center text-center">
         <Heading className="bg-gradient-to-r from-golden-300 via-golden-100 to-golden-300 bg-no-repeat text-transparent bg-clip-text font-extrabold">
           Dando Vida a Ideas Creando Experiencias Excepcionales

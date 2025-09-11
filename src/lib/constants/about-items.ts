@@ -40,8 +40,9 @@ export const aboutItems = [
     imgClassName: "",
     titleClassName:
       "justify-center text-center sm:text-left md:text-center text-golden-100",
-    img: "/grid.svg",
-    spareImg: "/b4.svg",
+    // img: "/images/card_texture.png",
+    img: "",
+    spareImg: "",
   },
   {
     id: 5,

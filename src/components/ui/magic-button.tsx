@@ -14,7 +14,7 @@ interface MagicButtonProps extends HTMLAttributes<HTMLButtonElement> {
 
 export const MagicButton = ({
   title,
-  type,
+  type = "button",
   icon,
   position = "left",
   classes,

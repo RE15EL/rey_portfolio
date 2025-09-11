@@ -1,6 +1,9 @@
 {
     "exportall.config.folderListener": [
         "/src/components",
-        "/src/components/ui"
+        "/src/components/ui",
+        "/src/lib/constants",
+        "/src/services",
+        "/src/types"
     ]
 }
