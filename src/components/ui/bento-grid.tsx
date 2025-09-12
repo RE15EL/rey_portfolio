@@ -73,16 +73,16 @@ export const BentoGridItem = ({
           "flex justify-center": id === 6,
         })}
       >
-        {/* image */}
-        <div className="w-full absolute">
+        {/* image ojo*/} 
+        <div className="w-full h-full absolute">
           {img && (
             <Image
               src={img}
               alt={img}
               height={800}
               width={800}
-              className={cn(imgClassName, "object-contain object-right-top", {
-                "-translate-y-10 md:-translate-y-0": id === 1,
+              className={cn(imgClassName, "object-center", {
+                "md:opacity-50 object-cover": id === 1,
               })}
             />
           )}

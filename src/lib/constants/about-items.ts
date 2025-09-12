@@ -7,7 +7,7 @@ export const aboutItems = [
     className: "lg:col-span-3 md:col-span-6 md:row-span-2 lg:min-h-[30vh]",
     imgClassName: "size-full",
     titleClassName: "justify-center md:justify-end text-golden-100",
-    img: "/images/mi_logo_2_card.png",
+    img: "/images/designer2.png",
     spareImg: "",
   },
   {
