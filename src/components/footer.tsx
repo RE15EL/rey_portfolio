@@ -59,6 +59,16 @@ export const Footer = () => {
           ))}
         </div>
       </div>
+
+      <div className="w-full flex justify-center mt-4">
+        <Image
+          src="/images/brand.png"
+          alt="footer brand"
+          width={400}
+          height={400}
+          className="opacity-75 pointer-events-none"
+        />
+      </div>
     </footer>
   );
 };

@@ -63,9 +63,7 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
-      backgroundImage: {
-        "card-texture": "url('/images/card_texture.png')",
-      },
+      backgroundImage: {},
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
