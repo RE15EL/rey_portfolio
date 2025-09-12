@@ -40,7 +40,6 @@ export const aboutItems = [
     imgClassName: "",
     titleClassName:
       "justify-center text-center sm:text-left md:text-center text-golden-100",
-    // img: "/images/card_texture.png",
     img: "",
     spareImg: "",
   },
@@ -50,11 +49,12 @@ export const aboutItems = [
       "Estoy explorando nuevos horizontes como el desarrollo de tecnologías móviles y la nube.",
     description: "La primicia",
     className: "md:col-span-3 md:row-span-2",
-    imgClassName: "absolute right-0 bottom-0 md:w-96 w-60",
+    imgClassName: "size-full",
+    // imgClassName: "absolute right-0 bottom-0 md:w-96 w-60",
     titleClassName:
       "justify-center md:justify-start lg:justify-end lg:items-end lg:text-right text-golden-100",
     img: "",
-    spareImg: "/images/grid.svg",
+    spareImg: "/images/designer.png",
   },
   {
     id: 6,

@@ -7,7 +7,7 @@ export const TechStackPreview = () => {
         {TECH_STACK_ITEMS.leftLists.map((item, i) => (
           <span
             key={`${item}-${i}`}
-            className="py-2 px-3 text-xs md:text-base text-golden-100/30 rounded-xl text-center bg-[#141628ad]"
+            className="py-2 px-3 text-xs md:text-base text-golden-100/50 rounded-xl text-center bg-[#141628ad]"
           >
             {item}
           </span>
@@ -18,7 +18,7 @@ export const TechStackPreview = () => {
         {TECH_STACK_ITEMS.rightLists.map((item, i) => (
           <span
             key={`${item}-${i}`}
-            className="py-2 px-3 text-xs md:text-base text-dark-100 rounded-xl text-center bg-[#10132e65]"
+            className="py-2 px-3 text-xs md:text-base text-golden-100/50 rounded-xl text-center bg-[#10132e65]"
           >
             {item}
           </span>
