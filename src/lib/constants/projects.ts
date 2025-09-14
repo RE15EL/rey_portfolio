@@ -3,7 +3,7 @@ import { IProject } from "@/types";
 export const projects: IProject[] = [
   {
     id: 1,
-    title: "Morereps App",
+    title: "Morereps",
     des: "App de planificación y seguimiento de rutinas, motivación, progreso y nutrición.",
     img: "/images/morereps_app.png",
     iconLists: [
@@ -42,9 +42,9 @@ export const projects: IProject[] = [
   },
   {
     id: 4,
-    title: "Articulación Digital",
-    des: "Portal web para servicios de agendamiento de Vitalmex.",
-    img: "/images/art_digital.png",
+    title: "Seriesly",
+    des: "App web para explorar series usando la API de The Movie Database (TMDB). Busca por distintos filtros y guarda tus series favoritas.",
+    img: "/images/seriesly_app.png",
     iconLists: [
       "/images/next.svg",
       "/images/ts.svg",
