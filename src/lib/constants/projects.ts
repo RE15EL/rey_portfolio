@@ -51,6 +51,6 @@ export const projects: IProject[] = [
       "/images/tail.svg",
       "/images/fm.svg",
     ],
-    link: "http://front.coolray.com.mx/",
+    link: "https://seriesly-app.vercel.app/",
   },
 ];
