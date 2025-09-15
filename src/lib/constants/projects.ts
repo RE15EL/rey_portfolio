@@ -44,7 +44,7 @@ export const projects: IProject[] = [
     id: 4,
     title: "Seriesly",
     des: "App web para explorar series usando la API de The Movie Database (TMDB). Busca por distintos filtros y guarda tus series favoritas.",
-    img: "/images/seriesly_app.png",
+    img: "/images/seriesly_app_2.png",
     iconLists: [
       "/images/next.svg",
       "/images/ts.svg",
