@@ -29,16 +29,16 @@ export const projects: IProject[] = [
   },
   {
     id: 3,
-    title: "Reto Viral (12345678)",
-    des: "El Reto Viral de 123456789 es un desafío de programación que demuestra la manipulación avanzada de cadenas y matrices mediante patrones visuales de dígitos.",
-    img: "/images/reto_viral.png",
+    title: "Tinttrace",
+    des: "Aplicación web intuitiva diseñada para extraer paletas de colores de imágenes al instante.",
+    img: "/images/tinttrace.png",
     iconLists: [
-      "/images/next.svg",
+      "/images/react.svg",
       "/images/ts.svg",
       "/images/tail.svg",
       "/images/fm.svg",
     ],
-    link: "#",
+    link: "https://tinttrace.vercel.app/",
   },
   {
     id: 4,
