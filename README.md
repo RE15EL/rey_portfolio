@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rey Portfolio
 
-## Getting Started
+Un sitio web de portafolio moderno y visualmente atractivo que presenta un diseño limpio, responsivo y animaciones suaves.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Características
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Diseño responsivo** – funciona en móvil, tablet y escritorio.
+- **Componentes animados** – movimiento sutil usando `framer‑motion` para una sensación premium.
+- **Código tipado** – soporte completo de TypeScript.
+- **Tailwind CSS** – estilo utility‑first con paleta de colores personalizada.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Tecnologías
 
-## Learn More
+| Categoría   | Tecnología                                |
+| ----------- | ----------------------------------------- |
+| Framework   | **Next.js 14**                            |
+| Lenguaje    | **TypeScript**                            |
+| Estilos     | **Tailwind CSS** (con tema personalizado) |
+| Íconos      | `@tabler/icons-react`, `lucide-react`     |
+| Animaciones | `framer‑motion`                           |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Diseño y estética
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+La interfaz sigue un estilo con degradados suaves, sombras sutiles y micro‑animaciones al pasar el cursor o hacer scroll.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📞 Contacto
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Autor**: Reisel Valle
+- **Correo**: reiselvalle@gmail.com
+- **LinkedIn**: [linkedin.com/in/reiselvr](https://www.linkedin.com/in/reiselvr/)
