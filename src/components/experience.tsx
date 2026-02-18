@@ -5,7 +5,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { HeadingSection } from "./heading-section";
-import { workExperienceCards } from "@/lib/constants";
+import { workExperienceCards } from "@/lib/constants/work-experience";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 
 export const Experience = () => {
@@ -20,36 +20,44 @@ export const Experience = () => {
 };
 
 function ExpandableCardDemo() {
-  const [active, setActive] = useState<
-    (typeof workExperienceCards)[number] | boolean | null
-  >(null);
+  const [active, setActive] =
+    useState<(typeof workExperienceCards)[number] | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
+  const isModalOpen = Boolean(active);
 
   useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
+    if (!isModalOpen) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setActive(false);
+        setActive(null);
       }
-    }
+    };
 
-    if (active && typeof active === "object") {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [active]);
 
-  useOutsideClick(ref, () => setActive(null));
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [isModalOpen]);
+
+  useOutsideClick(ref, () => {
+    if (isModalOpen) {
+      setActive(null);
+    }
+  });
 
   return (
     <>
       {/* overlay */}
       <AnimatePresence>
-        {active && typeof active === "object" && (
+        {isModalOpen && active && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -61,7 +69,7 @@ function ExpandableCardDemo() {
 
       {/* modal */}
       <AnimatePresence>
-        {active && typeof active === "object" ? (
+        {isModalOpen && active ? (
           <div className="fixed inset-0 grid place-items-center z-[100] bg-black-100/20">
             <motion.button
               key={`button-${active.title}-${id}`}
@@ -91,11 +99,11 @@ function ExpandableCardDemo() {
             >
               <motion.div layoutId={`image-${active.title}-${id}`}>
                 <Image
-                  priority
                   width={200}
                   height={200}
                   src={active.src}
                   alt={active.title}
+                  loading="lazy"
                   className="w-full h-64 md:h-52 object-cover object-top"
                 />
               </motion.div>

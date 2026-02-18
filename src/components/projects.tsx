@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { PinContainer } from "./ui";
 // import { LocateIcon } from "lucide-react";
-import { projects } from "@/lib/constants";
+import { projects } from "@/lib/constants/projects";
 
 export const RecentProjects = () => {
   return (
