@@ -6,6 +6,7 @@ import { Hero } from "@/components/hero";
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 import { RecentProjects } from "@/components/projects";
 import { navItems } from "@/lib/constants/menu";
+import { createProjectsModule } from "@/modules/projects/infrastructure/projects-module";
 
 const Experience = dynamic(
   () => import("@/components/experience").then((mod) => mod.Experience),
@@ -18,13 +19,16 @@ const FloatingNav = dynamic(
   { ssr: false }
 );
 
-export default function Home() {
+export default async function Home() {
+  const projectsModule = await createProjectsModule();
+  const projects = await projectsModule.listPublishedProjects.execute();
+
   return (
     <MaxWidthWrapper>
       <FloatingNav navItems={navItems} />
       <Hero />
       <About />
-      <RecentProjects />
+      <RecentProjects projects={projects} />
       <Experience />
       <Footer />
     </MaxWidthWrapper>
