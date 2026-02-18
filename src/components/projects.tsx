@@ -1,66 +1,73 @@
 import Image from "next/image";
-import { PinContainer } from "./ui";
-// import { LocateIcon } from "lucide-react";
-import { projects } from "@/lib/constants/projects";
 
-export const RecentProjects = () => {
+import type { IProject } from "@/modules/projects/domain/project";
+
+import { PinContainer } from "./ui";
+
+interface IRecentProjectsProps {
+  projects: IProject[];
+}
+
+export const RecentProjects = ({ projects }: IRecentProjectsProps) => {
   return (
     <div id="projects" className="py-20">
       <h1 className="heading ">
         Explora <span className="text-golden-100">Mis Proyectos</span>
       </h1>
 
-      {/* projects cards */}
-      <div className="flex flex-wrap justify-center items-center p-4 md:gap-x-20 gap-y-4 md:gap-y-0 mt-10">
-        {projects.map(({ des, iconLists, id, img, link, title }) => (
-          <div
-            key={id}
-            className="flex items-center justify-center w-full md:w-96 h-[24rem] lg:min-h-[32rem]"
-          >
-            <PinContainer title={title} href={link} containerClassName="w-full">
-              <div className="relative flex justify-center items-center w-full h-[20vh] lg:h-[30vh] sm:w-96 mb-10 overflow-hidden">
-                <div className="size-full">
-                  <Image
-                    src={img}
-                    alt={title}
-                    fill
-                    className="object-fill rounded-t-lg "
-                  />
+      {!projects.length && (
+        <p className="mt-10 text-center text-golden-100/70">
+          Aun no hay proyectos publicados.
+        </p>
+      )}
+
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-y-4 p-4 md:gap-x-20 md:gap-y-0">
+        {projects.map(
+          ({ description, id, imageUrl, projectUrl, repoUrl, stack, title }) => (
+            <div
+              key={id}
+              className="flex h-[24rem] w-full items-center justify-center md:w-96 lg:min-h-[32rem]"
+            >
+              <PinContainer
+                title={title}
+                href={projectUrl || repoUrl || "#"}
+                containerClassName="w-full"
+              >
+                <div className="relative mb-10 flex h-[20vh] w-full items-center justify-center overflow-hidden sm:w-96 lg:h-[30vh]">
+                  <div className="size-full">
+                    <Image
+                      src={imageUrl || "/images/taskmind.png"}
+                      alt={title}
+                      fill
+                      className="rounded-t-lg object-cover"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <h1 className="font-bold text-golden-100 text-base md:text-xl lg:text-2xl line-clamp-1">
-                {title}
-              </h1>
+                <h1 className="line-clamp-1 text-base font-bold text-golden-100 md:text-xl lg:text-2xl">
+                  {title}
+                </h1>
 
-              <p className="text-sm lg:text-[1rem] lg:font-normal font-light line-clamp-2 mt-2 mb-12">
-                {des}
-              </p>
+                <p className="mb-8 mt-2 line-clamp-2 text-sm font-light lg:text-[1rem] lg:font-normal">
+                  {description}
+                </p>
 
-              <div className="flex items-center justify-between mt-4 mb-3">
-                <div className="flex items-center">
-                  {iconLists.map((icon, index) => (
-                    <div
-                      key={icon}
-                      className=" rounded-full w-8 h-8 lg:w-10 lg:h-10 flex justify-center items-center"
-                      style={{
-                        transform: `translateX(-${5 * index * 2}px)`,
-                      }}
-                    >
-                      <Image
-                        src={icon}
-                        alt={icon}
-                        width={40}
-                        height={40}
-                        className="p-2"
-                      />
-                    </div>
-                  ))}
+                <div className="mb-3 mt-4 flex items-center justify-between">
+                  <div className="flex flex-wrap gap-2">
+                    {stack.slice(0, 4).map((item) => (
+                      <span
+                        key={`${id}-${item}`}
+                        className="rounded-full border border-golden-100/40 px-2 py-1 text-xs text-golden-100/90"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </PinContainer>
-          </div>
-        ))}
+              </PinContainer>
+            </div>
+          )
+        )}
       </div>
     </div>
   );
