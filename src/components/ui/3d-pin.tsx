@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -23,13 +23,6 @@ export const PinContainer = ({
     "translate(-50%,-50%) rotateX(0deg)"
   );
 
-  const [isClient, setIsClient] = useState(false);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   const onMouseEnter = () => {
     setTransform("translate(-50%,-50%) rotateX(40deg) scale(0.8)");
   };
@@ -37,7 +30,7 @@ export const PinContainer = ({
     setTransform("translate(-50%,-50%) rotateX(0deg) scale(1)");
   };
 
-  return isClient ? (
+  return (
     <Link
       className={cn(
         "relative group/pin z-50 cursor-pointer",
@@ -65,7 +58,7 @@ export const PinContainer = ({
       </div>
       <PinPerspective title={title} />
     </Link>
-  ) : null;
+  );
 };
 
 export const PinPerspective = ({

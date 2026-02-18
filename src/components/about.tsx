@@ -1,5 +1,5 @@
 import { BentoGrid, BentoGridItem } from "./ui";
-import { aboutItems } from "@/lib/constants";
+import { aboutItems } from "@/lib/constants/about-items";
 
 export const About = () => {
   return (

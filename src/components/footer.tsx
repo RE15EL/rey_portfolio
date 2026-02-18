@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { footerWords, socialMedia } from "@/lib/constants";
+import { footerWords } from "@/lib/constants/footer-words";
+import { socialMedia } from "@/lib/constants/social-media";
 import { MagicButton, TypewriterEffect } from "./ui";
 
 export const Footer = () => {
