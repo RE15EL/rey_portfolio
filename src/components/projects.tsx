@@ -6,16 +6,27 @@ import { PinContainer } from "./ui";
 
 interface IRecentProjectsProps {
   projects: IProject[];
+  hasLoadError?: boolean;
 }
 
-export const RecentProjects = ({ projects }: IRecentProjectsProps) => {
+export const RecentProjects = ({
+  projects,
+  hasLoadError = false,
+}: IRecentProjectsProps) => {
   return (
     <div id="projects" className="py-20">
       <h1 className="heading ">
         Explora <span className="text-golden-100">Mis Proyectos</span>
       </h1>
 
-      {!projects.length && (
+      {hasLoadError && (
+        <p className="mt-10 text-center text-sm text-amber-300/90">
+          No se pudieron cargar los proyectos en este momento. Probá de nuevo en
+          unos minutos.
+        </p>
+      )}
+
+      {!projects.length && !hasLoadError && (
         <p className="mt-10 text-center text-golden-100/70">
           Aun no hay proyectos publicados.
         </p>
