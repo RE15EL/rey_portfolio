@@ -6,6 +6,7 @@ import { Hero } from "@/components/hero";
 import { MaxWidthWrapper } from "@/components/max-width-wrapper";
 import { RecentProjects } from "@/components/projects";
 import { navItems } from "@/lib/constants/menu";
+import type { IProject } from "@/modules/projects/domain/project";
 import { createProjectsModule } from "@/modules/projects/infrastructure/projects-module";
 
 const Experience = dynamic(
@@ -20,15 +21,26 @@ const FloatingNav = dynamic(
 );
 
 export default async function Home() {
-  const projectsModule = await createProjectsModule();
-  const projects = await projectsModule.listPublishedProjects.execute();
+  let projects: IProject[] = [];
+  let hasProjectsLoadError = false;
+
+  try {
+    const projectsModule = await createProjectsModule();
+    projects = await projectsModule.listPublishedProjects.execute();
+  } catch (error) {
+    hasProjectsLoadError = true;
+    console.error("Failed to load projects for home page", error);
+  }
 
   return (
     <MaxWidthWrapper>
       <FloatingNav navItems={navItems} />
       <Hero />
       <About />
-      <RecentProjects projects={projects} />
+      <RecentProjects
+        projects={projects}
+        hasLoadError={hasProjectsLoadError}
+      />
       <Experience />
       <Footer />
     </MaxWidthWrapper>
