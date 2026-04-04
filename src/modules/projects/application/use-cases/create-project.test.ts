@@ -1,6 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { ProjectAlreadyExistsError } from "@/modules/projects/domain/errors";
+import {
+  InvalidProjectDataError,
+  ProjectAlreadyExistsError,
+  ProjectUnprocessableDataError,
+} from "@/modules/projects/domain/errors";
 import type { IProject } from "@/modules/projects/domain/project";
 import type { IProjectRepository } from "@/modules/projects/domain/project-repository";
 import { CreateProjectUseCase } from "./create-project";
@@ -12,6 +16,7 @@ const makeRepository = (): IProjectRepository => ({
   getBySlug: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
+  delete: vi.fn(),
   setPublished: vi.fn(),
 });
 
@@ -64,5 +69,56 @@ describe("CreateProjectUseCase", () => {
         updatedBy: "admin@example.com",
       })
     ).rejects.toBeInstanceOf(ProjectAlreadyExistsError);
+  });
+
+  it("rejects malformed URLs before writing", async () => {
+    const repository = makeRepository();
+    const useCase = new CreateProjectUseCase(repository);
+
+    await expect(
+      useCase.execute({
+        title: "Demo Project",
+        description: "Demo description",
+        projectUrl: "notaurl",
+        updatedBy: "admin@example.com",
+      })
+    ).rejects.toBeInstanceOf(ProjectUnprocessableDataError);
+
+    expect(repository.getBySlug).not.toHaveBeenCalled();
+    expect(repository.create).not.toHaveBeenCalled();
+  });
+
+  it("rejects unsafe sort order before writing", async () => {
+    const repository = makeRepository();
+    const useCase = new CreateProjectUseCase(repository);
+
+    await expect(
+      useCase.execute({
+        title: "Demo Project",
+        description: "Demo description",
+        sortOrder: 1.1,
+        updatedBy: "admin@example.com",
+      })
+    ).rejects.toBeInstanceOf(ProjectUnprocessableDataError);
+
+    expect(repository.getBySlug).not.toHaveBeenCalled();
+    expect(repository.create).not.toHaveBeenCalled();
+  });
+
+  it("rejects invalid slug and does not attempt writes", async () => {
+    const repository = makeRepository();
+    const useCase = new CreateProjectUseCase(repository);
+
+    await expect(
+      useCase.execute({
+        title: "Demo Project",
+        slug: "!!!",
+        description: "Demo description",
+        updatedBy: "admin@example.com",
+      })
+    ).rejects.toBeInstanceOf(InvalidProjectDataError);
+
+    expect(repository.getBySlug).not.toHaveBeenCalled();
+    expect(repository.create).not.toHaveBeenCalled();
   });
 });
