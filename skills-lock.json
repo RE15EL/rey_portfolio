@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "architecture-review": {
+      "source": "srstomp/pokayokay",
+      "sourceType": "github",
+      "computedHash": "8e20938d74e7f5a45fd200671a72bc27a7881b402bb59a6343d4f897603e6e8b"
+    },
     "frontend-design": {
       "source": "anthropics/skills",
       "sourceType": "github",
@@ -20,6 +25,11 @@
       "source": "supabase/agent-skills",
       "sourceType": "github",
       "computedHash": "e3ba3d760c5f4cc43b02a91fb8924f726c7818f95cc35d79d0a606ca622b72f5"
+    },
+    "typescript": {
+      "source": "lobehub/lobehub",
+      "sourceType": "github",
+      "computedHash": "88d247797eef607f1ecf542fb8175a81118fbb7a88a1e5dc23f7a1101f245a3f"
     },
     "vercel-composition-patterns": {
       "source": "vercel-labs/agent-skills",
