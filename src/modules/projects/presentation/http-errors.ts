@@ -2,6 +2,7 @@ import {
   InvalidProjectDataError,
   ProjectAlreadyExistsError,
   ProjectNotFoundError,
+  ProjectUnprocessableDataError,
 } from "../domain/errors";
 
 export const mapProjectErrorToHttp = (error: unknown) => {
@@ -15,6 +16,10 @@ export const mapProjectErrorToHttp = (error: unknown) => {
 
   if (error instanceof ProjectNotFoundError) {
     return { status: 404, message: error.message };
+  }
+
+  if (error instanceof ProjectUnprocessableDataError) {
+    return { status: 422, message: error.message };
   }
 
   return { status: 500, message: "Unexpected server error" };

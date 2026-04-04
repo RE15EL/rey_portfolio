@@ -8,6 +8,8 @@ import { slugify } from "../slugify";
 import {
   ensureValidDescription,
   ensureValidLinks,
+  ensureValidSlug,
+  ensureValidSortOrder,
   ensureValidTitle,
   normalizeStack,
 } from "../validate-project-input";
@@ -35,6 +37,12 @@ export class UpdateProjectUseCase {
     const slug = slugify(rawSlug);
     if (!slug) {
       throw new InvalidProjectDataError("Slug could not be generated");
+    }
+
+    ensureValidSlug(slug);
+
+    if (input.sortOrder !== undefined) {
+      ensureValidSortOrder(input.sortOrder);
     }
 
     return this.repository.update({
