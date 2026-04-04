@@ -5,7 +5,7 @@ import { GET } from "./route";
 const mocks = vi.hoisted(() => {
   return {
     createProjectsModule: vi.fn(),
-    listPublishedExecute: vi.fn(),
+    listPublishedProjectsCached: vi.fn(),
   };
 });
 
@@ -22,9 +22,9 @@ describe("GET /api/projects", () => {
     const projects = [{ id: "project-1", title: "Public Project" }];
 
     mocks.createProjectsModule.mockResolvedValue({
-      listPublishedProjects: {
-        execute: mocks.listPublishedExecute.mockResolvedValue(projects),
-      },
+      listPublishedProjectsCached: mocks.listPublishedProjectsCached.mockResolvedValue(
+        projects
+      ),
     });
 
     const response = await GET();
@@ -35,11 +35,9 @@ describe("GET /api/projects", () => {
 
   it("returns sanitized 500 when unexpected failures happen", async () => {
     mocks.createProjectsModule.mockResolvedValue({
-      listPublishedProjects: {
-        execute: mocks.listPublishedExecute.mockRejectedValue(
-          new Error("raw db failure")
-        ),
-      },
+      listPublishedProjectsCached: mocks.listPublishedProjectsCached.mockRejectedValue(
+        new Error("raw db failure")
+      ),
     });
 
     const response = await GET();

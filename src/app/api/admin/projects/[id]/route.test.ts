@@ -12,6 +12,7 @@ const mocks = vi.hoisted(() => {
     getAdminApiContext: vi.fn(),
     buildUnauthorizedResponse: vi.fn(),
     createProjectsModule: vi.fn(),
+    revalidatePublishedProjectsFeedCache: vi.fn(),
     deleteExecute: vi.fn(),
     updateExecute: vi.fn(),
   };
@@ -24,6 +25,10 @@ vi.mock("@/lib/auth/get-admin-api-context", () => ({
 
 vi.mock("@/modules/projects/infrastructure/projects-module", () => ({
   createProjectsModule: mocks.createProjectsModule,
+}));
+
+vi.mock("@/modules/projects/infrastructure/cache", () => ({
+  revalidatePublishedProjectsFeedCache: mocks.revalidatePublishedProjectsFeedCache,
 }));
 
 describe("DELETE /api/admin/projects/[id]", () => {
@@ -46,6 +51,7 @@ describe("DELETE /api/admin/projects/[id]", () => {
 
     expect(response.status).toBe(401);
     expect(mocks.createProjectsModule).not.toHaveBeenCalled();
+    expect(mocks.revalidatePublishedProjectsFeedCache).not.toHaveBeenCalled();
   });
 
   it("returns 204 when delete succeeds", async () => {
@@ -68,6 +74,7 @@ describe("DELETE /api/admin/projects/[id]", () => {
       "project-1",
       "admin@example.com"
     );
+    expect(mocks.revalidatePublishedProjectsFeedCache).toHaveBeenCalledTimes(1);
   });
 
   it("maps not found to 404", async () => {
@@ -88,6 +95,7 @@ describe("DELETE /api/admin/projects/[id]", () => {
     });
 
     expect(response.status).toBe(404);
+    expect(mocks.revalidatePublishedProjectsFeedCache).not.toHaveBeenCalled();
   });
 
   it("maps conflict errors to 409", async () => {
@@ -108,6 +116,7 @@ describe("DELETE /api/admin/projects/[id]", () => {
     });
 
     expect(response.status).toBe(409);
+    expect(mocks.revalidatePublishedProjectsFeedCache).not.toHaveBeenCalled();
   });
 
   it("maps unprocessable errors to 422", async () => {
@@ -128,6 +137,28 @@ describe("DELETE /api/admin/projects/[id]", () => {
     });
 
     expect(response.status).toBe(422);
+    expect(mocks.revalidatePublishedProjectsFeedCache).not.toHaveBeenCalled();
+  });
+
+  it("keeps 204 response when invalidation fails", async () => {
+    mocks.getAdminApiContext.mockResolvedValue({
+      userId: "admin-id",
+      email: "admin@example.com",
+    });
+    mocks.createProjectsModule.mockResolvedValue({
+      deleteProject: {
+        execute: mocks.deleteExecute.mockResolvedValue(undefined),
+      },
+    });
+    mocks.revalidatePublishedProjectsFeedCache.mockImplementation(() => {
+      throw new Error("revalidation failed");
+    });
+
+    const response = await DELETE(new Request("http://localhost"), {
+      params: { id: "project-1" },
+    });
+
+    expect(response.status).toBe(204);
   });
 });
 
@@ -155,6 +186,7 @@ describe("PATCH /api/admin/projects/[id]", () => {
 
     expect(response.status).toBe(401);
     expect(mocks.createProjectsModule).not.toHaveBeenCalled();
+    expect(mocks.revalidatePublishedProjectsFeedCache).not.toHaveBeenCalled();
   });
 
   it("returns 200 when update succeeds", async () => {
@@ -190,6 +222,7 @@ describe("PATCH /api/admin/projects/[id]", () => {
         updatedBy: "admin@example.com",
       })
     );
+    expect(mocks.revalidatePublishedProjectsFeedCache).toHaveBeenCalledTimes(1);
   });
 
   it("maps not found to 404", async () => {
@@ -214,6 +247,7 @@ describe("PATCH /api/admin/projects/[id]", () => {
     );
 
     expect(response.status).toBe(404);
+    expect(mocks.revalidatePublishedProjectsFeedCache).not.toHaveBeenCalled();
   });
 
   it("maps conflict errors to 409", async () => {
@@ -238,6 +272,7 @@ describe("PATCH /api/admin/projects/[id]", () => {
     );
 
     expect(response.status).toBe(409);
+    expect(mocks.revalidatePublishedProjectsFeedCache).not.toHaveBeenCalled();
   });
 
   it("maps unprocessable errors to 422", async () => {
@@ -262,5 +297,37 @@ describe("PATCH /api/admin/projects/[id]", () => {
     );
 
     expect(response.status).toBe(422);
+    expect(mocks.revalidatePublishedProjectsFeedCache).not.toHaveBeenCalled();
+  });
+
+  it("keeps 200 response when invalidation fails", async () => {
+    const updated = {
+      id: "project-1",
+      slug: "project-1",
+      title: "Updated",
+    };
+
+    mocks.getAdminApiContext.mockResolvedValue({
+      userId: "admin-id",
+      email: "admin@example.com",
+    });
+    mocks.createProjectsModule.mockResolvedValue({
+      updateProject: {
+        execute: mocks.updateExecute.mockResolvedValue(updated),
+      },
+    });
+    mocks.revalidatePublishedProjectsFeedCache.mockImplementation(() => {
+      throw new Error("revalidation failed");
+    });
+
+    const response = await PATCH(
+      new Request("http://localhost", {
+        method: "PATCH",
+        body: JSON.stringify({ title: "Updated" }),
+      }),
+      { params: { id: "project-1" } }
+    );
+
+    expect(response.status).toBe(200);
   });
 });
