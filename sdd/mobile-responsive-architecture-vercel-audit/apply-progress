@@ -1,0 +1,42 @@
+# Apply Progress (Remediation): mobile-responsive-architecture-vercel-audit
+
+## Context
+- Phase: `sdd-apply` (remediation)
+- Mode: Standard (Strict TDD not active)
+- Goal: Close CRITICAL verify gaps for stable card sizing contract and desktop visual parity evidence.
+
+## Remediation Completed
+
+### 1) Stable card sizing contract tests in `project-card-base`
+- Added explicit spec-mapped tests that verify:
+  - no rigid viewport-height dependency (no `vh`-style fixed height contract reliance),
+  - bounded width guards (`w-full`, `max-w-[22rem]`, `min-w-0`),
+  - consistent media ratio contract (`aspect-[16/9]`),
+  - truncation/wrapping guards (`break-words`, `max-w-full`),
+  - stack/tag wrapping and bounded tag behavior (`flex-wrap`, tag `max-w-full break-words`).
+
+### 2) Desktop parity contract tests in `projects`
+- Added explicit contract tests that verify:
+  - mobile branch uses non-3D wrapper (`md:hidden`) with no `PinContainer`.
+  - desktop branch uses 3D wrapper path (`hidden md:block`) with `PinContainer`.
+  - both branches render the same shared content contract (title, description, stack) sourced from `ProjectCardBase`.
+
+### 3) Spec scenario traceability
+- New test names are directly aligned to spec scenarios, including:
+  - stable sizing contract + mixed content lengths,
+  - mobile vs desktop branch parity contract,
+  - shared content equivalence across responsive branches.
+
+## Quality Gates Executed
+- `npm run test` ✅
+  - Test Files: 17 passed
+  - Tests: 63 passed
+- `npm run lint` ✅ (No ESLint warnings or errors)
+- `npx tsc --noEmit` ✅
+
+## Files Updated
+- `src/components/project-card-base.test.tsx`
+- `src/components/projects.responsive.test.tsx`
+
+## Notes
+- No build executed (policy constraint preserved: never run build in this workflow).

@@ -1,0 +1,102 @@
+## Verification Report
+
+**Change**: mobile-responsive-architecture-vercel-audit  
+**Mode**: Standard (Strict TDD not active; no cached `sdd/rey_portfolio/testing-capabilities`, no `openspec/config.yaml`)  
+**Date**: 2026-04-04 (rerun)
+
+---
+
+### Completeness
+| Metric | Value |
+|---|---:|
+| Tasks total | 12 |
+| Tasks complete | 12 |
+| Tasks incomplete | 0 |
+
+All tasks in `sdd/mobile-responsive-architecture-vercel-audit/tasks` are marked complete.
+
+---
+
+### Build & Tests Execution
+
+**Build**: ⚠️ Skipped (repository rule in AGENTS: "Never build after changes")
+
+**Type check** (`npx tsc --noEmit`): ✅ Passed (exit code 0)
+
+**Lint** (`npm run lint`): ✅ Passed
+```txt
+✔ No ESLint warnings or errors
+```
+
+**Tests** (`npm run test`): ✅ 63 passed / ❌ 0 failed / ⚠️ 0 skipped
+```txt
+Test Files  17 passed (17)
+Tests       63 passed (63)
+Duration    10.03s
+```
+
+**Coverage**: ➖ Not available (no coverage command configured in verify flow)
+
+---
+
+### Spec Compliance Matrix
+
+| Requirement | Scenario | Test | Result |
+|---|---|---|---|
+| Breakpoint-Specific Card Variant | Mobile variant is selected (390px) | `src/components/projects.responsive.test.tsx > spec scenario: mobile uses non-3D wrapper while desktop uses 3D wrapper` | ✅ COMPLIANT |
+| Breakpoint-Specific Card Variant | Desktop variant remains active (1024px) | `src/components/projects.responsive.test.tsx > spec scenario: mobile uses non-3D wrapper while desktop uses 3D wrapper` + `... > spec scenario: desktop and mobile branches share same content contract` | ✅ COMPLIANT |
+| No Horizontal Overflow | Overflow audit at target widths (360/390/414/441, `scrollWidth===viewport`) | `src/components/projects.responsive.test.tsx > keeps overflow guard contract for target mobile widths` | ⚠️ PARTIAL |
+| No Horizontal Overflow | Long content edge case at 360px | `src/components/project-card-base.test.tsx > spec scenario: truncation and wrapping guards are preserved for long text and tags` | ⚠️ PARTIAL |
+| Stable Card Sizing Contract | Media stability on mobile (414px) | `src/components/project-card-base.test.tsx > spec scenario: stable card sizing contract avoids rigid viewport-height dependency` | ✅ COMPLIANT |
+| Stable Card Sizing Contract | Mixed content lengths at 390px | `src/components/project-card-base.test.tsx > spec scenario: mixed content lengths keep bounded widths and media proportions` | ✅ COMPLIANT |
+| Desktop Visual Parity | Desktop parity check (1280px before/after interactions) | `src/components/projects.responsive.test.tsx > spec scenario: mobile uses non-3D wrapper while desktop uses 3D wrapper` + `... > spec scenario: desktop and mobile branches share same content contract` | ⚠️ PARTIAL |
+| Explicit `sizes` for `Image fill` | Projects images include sizes | `src/components/project-card-base.test.tsx > renders shared content and fallback image with explicit sizes` | ✅ COMPLIANT |
+| Explicit `sizes` for `Image fill` | Footer image include sizes | `src/components/footer.responsive.test.tsx > defines explicit sizes for fill image` | ✅ COMPLIANT |
+
+**Compliance summary**: 6/9 scenarios COMPLIANT, 3/9 PARTIAL, 0 FAILING, 0 UNTESTED
+
+---
+
+### Correctness (Static — Structural Evidence)
+
+| Requirement | Status | Notes |
+|---|---|---|
+| Breakpoint-Specific Card Variant | ✅ Implemented | `projects.tsx` renders `md:hidden` mobile wrapper + `hidden md:block` desktop `PinContainer` with shared `ProjectCardBase`. |
+| No Horizontal Overflow | ✅ Implemented | `projects.tsx` applies `overflow-x-clip` and constrained containers; `project-card-base.tsx` enforces `min-w-0`, bounded widths, wrapping. |
+| Stable Card Sizing Contract | ✅ Implemented | `project-card-base.tsx` uses `aspect-[16/9]` media and avoids rigid viewport-height sizing classes. |
+| Desktop Visual Parity | ⚠️ Partial evidence | Desktop 3D path still present and content parity tested, but no before/after visual-interaction regression artifact. |
+| Explicit `sizes` for `Image fill` | ✅ Implemented | Project card and footer `Image fill` instances include explicit `sizes`. |
+
+---
+
+### Coherence (Design)
+
+| Decision | Followed? | Notes |
+|---|---|---|
+| Shared `ProjectCardBase` + breakpoint wrappers | ✅ Yes | Implemented in `project-card-base.tsx` and consumed by both paths in `projects.tsx`. |
+| CSS-only gating (`md:hidden` / `hidden md:block`) | ✅ Yes | No JS viewport detection introduced. |
+| Content-first + aspect-ratio media block | ✅ Yes | Contract implemented with bounded width + `aspect-[16/9]`. |
+| File changes table alignment | ✅ Yes | Files in design/task scope exist and reflect expected updates. |
+
+---
+
+### Issues Found
+
+**CRITICAL** (must fix before archive):
+None.
+
+**WARNING** (should fix):
+1. Overflow scenarios are validated by structural guard assertions, but not by runtime layout metrics (`scrollWidth === innerWidth`) in a real browser.
+2. Desktop parity scenario is partially validated (path + content contract), without before/after visual interaction regression evidence at 1280px.
+3. Build verification remains skipped due repository rule; production build confidence is inferred from tests/lint/typecheck.
+
+**SUGGESTION** (nice to have):
+1. Add Playwright viewport checks for 360/390/414/441 validating real `scrollWidth` and clipping.
+2. Add desktop visual-regression snapshot for 1024/1280 hover/interactions in `PinContainer` path.
+
+---
+
+### Verdict
+**PASS WITH WARNINGS**
+
+Previous CRITICAL `UNTESTED` gaps were closed (stable sizing + desktop branch evidence now present), but runtime viewport/visual parity proof is still partial.
