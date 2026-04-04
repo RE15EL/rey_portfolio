@@ -33,7 +33,7 @@ export const PinContainer = ({
   return (
     <Link
       className={cn(
-        "relative group/pin z-50 cursor-pointer",
+        "group/pin relative z-50 block max-w-full cursor-pointer overflow-x-clip",
         containerClassName
       )}
       onMouseEnter={onMouseEnter}
@@ -45,15 +45,17 @@ export const PinContainer = ({
           perspective: "1000px",
           transform: "rotateX(70deg) translateZ(0deg)",
         }}
-        className="absolute left-1/2 top-1/2 ml-[0.09375rem] mt-4 -translate-x-1/2 -translate-y-1/2"
+        className="absolute left-1/2 top-1/2 ml-[0.09375rem] mt-4 max-w-full -translate-x-1/2 -translate-y-1/2"
       >
         <div
           style={{
             transform: transform,
           }}
-          className="absolute left-1/2 p-4 top-1/2 flex justify-start items-start rounded-2xl shadow-[0_8px_16px_rgb(0_0_0/0.4)] border border-white/[0.1] group-hover/pin:border-golden-100 transition duration-700 overflow-hidden"
+          className="absolute left-1/2 top-1/2 flex max-w-full items-start justify-start overflow-hidden rounded-2xl border border-white/[0.1] p-4 shadow-[0_8px_16px_rgb(0_0_0/0.4)] transition duration-700 group-hover/pin:border-golden-100"
         >
-          <div className={cn("relative z-50 ", className)}>{children}</div>
+          <div className={cn("relative z-50 w-full max-w-full", className)}>
+            {children}
+          </div>
         </div>
       </div>
       <PinPerspective title={title} />
@@ -67,8 +69,8 @@ export const PinPerspective = ({
   title?: string;
 }) => {
   return (
-    <motion.div className="pointer-events-none  w-full h-80 flex items-center justify-center opacity-0 group-hover/pin:opacity-100 z-[60] transition duration-500 ">
-      <div className=" w-full h-full -mt-7 flex-none  inset-0">
+    <motion.div className="pointer-events-none z-[60] flex h-80 w-full max-w-full items-center justify-center overflow-hidden opacity-0 transition duration-500 group-hover/pin:opacity-100">
+      <div className="inset-0 -mt-7 h-full w-full flex-none">
         <div className="absolute top-0 inset-x-0  flex justify-center">
           <div
             className="relative flex space-x-2 items-center z-10 rounded-full bg-slate-900/50 py-0.5 px-4 ring-1 ring-white/10 "

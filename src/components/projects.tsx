@@ -1,7 +1,8 @@
-import Image from "next/image";
+import Link from "next/link";
 
 import type { IProject } from "@/modules/projects/domain/project";
 
+import { ProjectCardBase } from "./project-card-base";
 import { PinContainer } from "./ui";
 
 interface IRecentProjectsProps {
@@ -32,53 +33,50 @@ export const RecentProjects = ({
         </p>
       )}
 
-      <div className="mt-10 flex flex-wrap items-center justify-center gap-y-4 p-4 md:gap-x-20 md:gap-y-0">
-        {projects.map(
-          ({ description, id, imageUrl, projectUrl, repoUrl, stack, title }) => (
-            <div
-              key={id}
-              className="flex h-[24rem] w-full items-center justify-center md:w-96 lg:min-h-[32rem]"
-            >
-              <PinContainer
-                title={title}
-                href={projectUrl || repoUrl || "#"}
-                containerClassName="w-full"
+      <div
+        className="mt-10 overflow-x-clip px-1 sm:px-2"
+        data-testid="projects-overflow-guard"
+      >
+        <div
+          className="mx-auto grid max-w-screen-lg grid-cols-1 justify-items-center gap-6 md:grid-cols-2 md:gap-10 xl:grid-cols-3"
+          data-testid="projects-grid"
+        >
+          {projects.map((project) => {
+            const projectHref = project.projectUrl || project.repoUrl || "#";
+
+            return (
+              <div
+                key={project.id}
+                className="w-full min-w-0 max-w-[22rem] md:max-w-full"
               >
-                <div className="relative mb-10 flex h-[20vh] w-full items-center justify-center overflow-hidden sm:w-96 lg:h-[30vh]">
-                  <div className="size-full">
-                    <Image
-                      src={imageUrl || "/images/taskmind.png"}
-                      alt={title}
-                      fill
-                      className="rounded-t-lg object-cover"
+                <Link
+                  href={projectHref}
+                  className="block w-full md:hidden"
+                  data-testid="project-mobile-wrapper"
+                >
+                  <ProjectCardBase project={project} />
+                </Link>
+
+                <div
+                  className="hidden w-full md:block"
+                  data-testid="project-desktop-wrapper"
+                >
+                  <PinContainer
+                    title={project.title}
+                    href={projectHref}
+                    containerClassName="w-full max-w-full"
+                    className="w-full"
+                  >
+                    <ProjectCardBase
+                      project={project}
+                      className="w-full border-none bg-transparent p-0 shadow-none"
                     />
-                  </div>
+                  </PinContainer>
                 </div>
-
-                <h1 className="line-clamp-1 text-base font-bold text-golden-100 md:text-xl lg:text-2xl">
-                  {title}
-                </h1>
-
-                <p className="mb-8 mt-2 line-clamp-2 text-sm font-light lg:text-[1rem] lg:font-normal">
-                  {description}
-                </p>
-
-                <div className="mb-3 mt-4 flex items-center justify-between">
-                  <div className="flex flex-wrap gap-2">
-                    {stack.slice(0, 4).map((item) => (
-                      <span
-                        key={`${id}-${item}`}
-                        className="rounded-full border border-golden-100/40 px-2 py-1 text-xs text-golden-100/90"
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </PinContainer>
-            </div>
-          )
-        )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

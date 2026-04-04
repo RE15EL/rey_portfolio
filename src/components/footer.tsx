@@ -16,6 +16,7 @@ export const Footer = () => {
           src="/images/footer-grid.svg"
           alt="footer grid"
           fill
+          sizes="100vw"
           className="size-full opacity-50 object-cover object-center"
         />
       </div>
