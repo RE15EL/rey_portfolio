@@ -1,16 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
-import Lottie from "react-lottie";
 
 import animationData from "@/lib/data/confetti.json";
 import { MagicButton } from "./magic-button";
 import { IconCopy } from "@tabler/icons-react";
 import { IBentoGridItem } from "@/types/ui.interface";
 import { TechStackPreview } from "../tech-stack-preview";
+
+const Lottie = dynamic(() => import("react-lottie"), { ssr: false });
 
 export const BentoGrid = ({
   className,
