@@ -1,6 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-import { ProjectNotFoundError } from "../domain/errors";
+import {
+  ProjectAlreadyExistsError,
+  ProjectNotFoundError,
+  ProjectUnprocessableDataError,
+  ProjectsError,
+} from "../domain/errors";
 import type {
   ICreateProjectInput,
   IProject,
@@ -24,6 +29,18 @@ interface IProjectRow {
   updated_by: string | null;
 }
 
+interface ISupabaseError {
+  code?: string;
+  message: string;
+  details?: string;
+}
+
+interface ITranslateErrorContext {
+  operation: "create" | "update" | "delete" | "setPublished";
+  projectId?: string;
+  slug?: string;
+}
+
 const mapRowToProject = (row: IProjectRow): IProject => {
   return {
     id: row.id,
@@ -42,6 +59,38 @@ const mapRowToProject = (row: IProjectRow): IProject => {
   };
 };
 
+const extractSlugFromConflict = (error: ISupabaseError, fallback?: string) => {
+  if (fallback) {
+    return fallback;
+  }
+
+  const source = `${error.details ?? ""} ${error.message}`;
+  const match = source.match(/\(slug\)=\(([^)]+)\)/i);
+
+  return match?.[1] ?? "unknown";
+};
+
+const translatePersistenceError = (
+  error: ISupabaseError,
+  context: ITranslateErrorContext
+) => {
+  if (error.code === "23505") {
+    return new ProjectAlreadyExistsError(
+      extractSlugFromConflict(error, context.slug)
+    );
+  }
+
+  if (["22P02", "22003", "23514"].includes(error.code ?? "")) {
+    return new ProjectUnprocessableDataError("Project payload is not processable");
+  }
+
+  if (error.code === "PGRST116") {
+    return new ProjectNotFoundError(context.projectId ?? "unknown");
+  }
+
+  return new ProjectsError(`Failed to ${context.operation} project`);
+};
+
 export class SupabaseProjectRepository implements IProjectRepository {
   constructor(private readonly supabase: SupabaseClient) {}
 
@@ -54,7 +103,7 @@ export class SupabaseProjectRepository implements IProjectRepository {
       .order("created_at", { ascending: false });
 
     if (error) {
-      throw new Error(`Failed to list published projects: ${error.message}`);
+      throw new ProjectsError("Failed to list published projects");
     }
 
     return (data as IProjectRow[]).map(mapRowToProject);
@@ -68,7 +117,7 @@ export class SupabaseProjectRepository implements IProjectRepository {
       .order("created_at", { ascending: false });
 
     if (error) {
-      throw new Error(`Failed to list projects: ${error.message}`);
+      throw new ProjectsError("Failed to list projects");
     }
 
     return (data as IProjectRow[]).map(mapRowToProject);
@@ -82,7 +131,7 @@ export class SupabaseProjectRepository implements IProjectRepository {
       .maybeSingle();
 
     if (error) {
-      throw new Error(`Failed to get project by id: ${error.message}`);
+      throw new ProjectsError("Failed to get project by id");
     }
 
     if (!data) {
@@ -100,7 +149,7 @@ export class SupabaseProjectRepository implements IProjectRepository {
       .maybeSingle();
 
     if (error) {
-      throw new Error(`Failed to get project by slug: ${error.message}`);
+      throw new ProjectsError("Failed to get project by slug");
     }
 
     if (!data) {
@@ -129,7 +178,10 @@ export class SupabaseProjectRepository implements IProjectRepository {
       .single();
 
     if (error) {
-      throw new Error(`Failed to create project: ${error.message}`);
+      throw translatePersistenceError(error as ISupabaseError, {
+        operation: "create",
+        slug: input.slug,
+      });
     }
 
     return mapRowToProject(data as IProjectRow);
@@ -157,7 +209,11 @@ export class SupabaseProjectRepository implements IProjectRepository {
       .maybeSingle();
 
     if (error) {
-      throw new Error(`Failed to update project: ${error.message}`);
+      throw translatePersistenceError(error as ISupabaseError, {
+        operation: "update",
+        projectId: input.id,
+        slug: input.slug,
+      });
     }
 
     if (!data) {
@@ -165,6 +221,28 @@ export class SupabaseProjectRepository implements IProjectRepository {
     }
 
     return mapRowToProject(data as IProjectRow);
+  }
+
+  async delete(id: string, _updatedBy: string): Promise<void> {
+    void _updatedBy;
+
+    const { data, error } = await this.supabase
+      .from("projects")
+      .delete()
+      .eq("id", id)
+      .select("id")
+      .maybeSingle();
+
+    if (error) {
+      throw translatePersistenceError(error as ISupabaseError, {
+        operation: "delete",
+        projectId: id,
+      });
+    }
+
+    if (!data) {
+      throw new ProjectNotFoundError(id);
+    }
   }
 
   async setPublished(
@@ -183,7 +261,10 @@ export class SupabaseProjectRepository implements IProjectRepository {
       .maybeSingle();
 
     if (error) {
-      throw new Error(`Failed to update publish state: ${error.message}`);
+      throw translatePersistenceError(error as ISupabaseError, {
+        operation: "setPublished",
+        projectId: id,
+      });
     }
 
     if (!data) {

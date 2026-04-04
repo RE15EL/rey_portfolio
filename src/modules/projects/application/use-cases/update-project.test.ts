@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { ProjectNotFoundError } from "@/modules/projects/domain/errors";
+import {
+  ProjectNotFoundError,
+  ProjectUnprocessableDataError,
+} from "@/modules/projects/domain/errors";
 import type { IProject } from "@/modules/projects/domain/project";
 import type { IProjectRepository } from "@/modules/projects/domain/project-repository";
 import { UpdateProjectUseCase } from "./update-project";
@@ -12,6 +15,7 @@ const makeRepository = (): IProjectRepository => ({
   getBySlug: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
+  delete: vi.fn(),
   setPublished: vi.fn(),
 });
 
@@ -71,5 +75,22 @@ describe("UpdateProjectUseCase", () => {
         title: "New Title",
       })
     );
+  });
+
+  it("rejects invalid sortOrder before repository update", async () => {
+    const repository = makeRepository();
+    vi.mocked(repository.getById).mockResolvedValue(existingProject);
+
+    const useCase = new UpdateProjectUseCase(repository);
+
+    await expect(
+      useCase.execute({
+        id: existingProject.id,
+        sortOrder: 10000,
+        updatedBy: "admin@example.com",
+      })
+    ).rejects.toBeInstanceOf(ProjectUnprocessableDataError);
+
+    expect(repository.update).not.toHaveBeenCalled();
   });
 });

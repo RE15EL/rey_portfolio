@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { ProjectNotFoundError } from "@/modules/projects/domain/errors";
 import type { IProject } from "@/modules/projects/domain/project";
 import type { IProjectRepository } from "@/modules/projects/domain/project-repository";
-import { SetProjectPublishedUseCase } from "./set-project-published";
+import { DeleteProjectUseCase } from "./delete-project";
 
 const makeRepository = (): IProjectRepository => ({
   listPublished: vi.fn(),
@@ -32,32 +32,29 @@ const existingProject: IProject = {
   updatedBy: "admin@example.com",
 };
 
-describe("SetProjectPublishedUseCase", () => {
-  it("throws when project is missing", async () => {
+describe("DeleteProjectUseCase", () => {
+  it("throws when project does not exist", async () => {
     const repository = makeRepository();
     vi.mocked(repository.getById).mockResolvedValue(null);
 
-    const useCase = new SetProjectPublishedUseCase(repository);
+    const useCase = new DeleteProjectUseCase(repository);
 
     await expect(
-      useCase.execute("missing-id", true, "admin@example.com")
+      useCase.execute("missing-id", "admin@example.com")
     ).rejects.toBeInstanceOf(ProjectNotFoundError);
+    expect(repository.delete).not.toHaveBeenCalled();
   });
 
-  it("updates publish status for existing project", async () => {
+  it("deletes project when it exists", async () => {
     const repository = makeRepository();
     vi.mocked(repository.getById).mockResolvedValue(existingProject);
-    vi.mocked(repository.setPublished).mockResolvedValue({
-      ...existingProject,
-      isPublished: true,
-    });
+    vi.mocked(repository.delete).mockResolvedValue(undefined);
 
-    const useCase = new SetProjectPublishedUseCase(repository);
-    await useCase.execute(existingProject.id, true, "admin@example.com");
+    const useCase = new DeleteProjectUseCase(repository);
+    await useCase.execute(existingProject.id, "admin@example.com");
 
-    expect(repository.setPublished).toHaveBeenCalledWith(
+    expect(repository.delete).toHaveBeenCalledWith(
       existingProject.id,
-      true,
       "admin@example.com"
     );
   });

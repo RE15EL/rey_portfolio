@@ -1,4 +1,5 @@
 import { CreateProjectUseCase } from "../application/use-cases/create-project";
+import { DeleteProjectUseCase } from "../application/use-cases/delete-project";
 import { GetProjectByIdUseCase } from "../application/use-cases/get-project-by-id";
 import { ListAdminProjectsUseCase } from "../application/use-cases/list-admin-projects";
 import { ListPublishedProjectsUseCase } from "../application/use-cases/list-published-projects";
@@ -16,6 +17,7 @@ export const createProjectsModule = async () => {
     getProjectById: new GetProjectByIdUseCase(repository),
     createProject: new CreateProjectUseCase(repository),
     updateProject: new UpdateProjectUseCase(repository),
+    deleteProject: new DeleteProjectUseCase(repository),
     setProjectPublished: new SetProjectPublishedUseCase(repository),
   };
 };

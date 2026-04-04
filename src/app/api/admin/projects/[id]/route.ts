@@ -44,3 +44,23 @@ export async function PATCH(request: Request, context: IParams) {
     return NextResponse.json({ error: mapped.message }, { status: mapped.status });
   }
 }
+
+export async function DELETE(_request: Request, context: IParams) {
+  const admin = await getAdminApiContext();
+  if (!admin) {
+    return buildUnauthorizedResponse();
+  }
+
+  const { id } = context.params;
+
+  try {
+    const projectsModule = await createProjectsModule();
+    await projectsModule.deleteProject.execute(id, admin.email);
+
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    const mapped = mapProjectErrorToHttp(error);
+
+    return NextResponse.json({ error: mapped.message }, { status: mapped.status });
+  }
+}

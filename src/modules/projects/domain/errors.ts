@@ -25,3 +25,10 @@ export class ProjectNotFoundError extends ProjectsError {
     this.name = "ProjectNotFoundError";
   }
 }
+
+export class ProjectUnprocessableDataError extends ProjectsError {
+  constructor(message: string) {
+    super(message);
+    this.name = "ProjectUnprocessableDataError";
+  }
+}

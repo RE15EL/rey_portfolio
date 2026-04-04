@@ -11,5 +11,6 @@ export interface IProjectRepository {
   getBySlug(slug: string): Promise<IProject | null>;
   create(input: ICreateProjectInput): Promise<IProject>;
   update(input: IUpdateProjectInput): Promise<IProject>;
+  delete(id: string, updatedBy: string): Promise<void>;
   setPublished(id: string, isPublished: boolean, updatedBy: string): Promise<IProject>;
 }

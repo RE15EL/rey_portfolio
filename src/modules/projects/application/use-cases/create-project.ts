@@ -11,6 +11,8 @@ import { slugify } from "../slugify";
 import {
   ensureValidDescription,
   ensureValidLinks,
+  ensureValidSlug,
+  ensureValidSortOrder,
   ensureValidTitle,
   normalizeStack,
 } from "../validate-project-input";
@@ -28,6 +30,11 @@ export class CreateProjectUseCase {
       throw new InvalidProjectDataError("Slug could not be generated");
     }
 
+    ensureValidSlug(slug);
+
+    const sortOrder = input.sortOrder ?? 0;
+    ensureValidSortOrder(sortOrder);
+
     const existing = await this.repository.getBySlug(slug);
     if (existing) {
       throw new ProjectAlreadyExistsError(slug);
@@ -42,7 +49,7 @@ export class CreateProjectUseCase {
       imageUrl: input.imageUrl?.trim(),
       projectUrl: input.projectUrl?.trim(),
       repoUrl: input.repoUrl?.trim(),
-      sortOrder: input.sortOrder ?? 0,
+      sortOrder,
       isPublished: input.isPublished ?? false,
     });
   }
