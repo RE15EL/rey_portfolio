@@ -5,6 +5,7 @@ import {
   getAdminApiContext,
 } from "@/lib/auth/get-admin-api-context";
 import type { ICreateProjectInput } from "@/modules/projects/domain/project";
+import { revalidatePublishedProjectsFeedCache } from "@/modules/projects/infrastructure/cache";
 import { createProjectsModule } from "@/modules/projects/infrastructure/projects-module";
 import { mapProjectErrorToHttp } from "@/modules/projects/presentation/http-errors";
 
@@ -48,6 +49,12 @@ export async function POST(request: Request) {
       sortOrder: body.sortOrder,
       updatedBy: admin.email,
     });
+
+    try {
+      revalidatePublishedProjectsFeedCache();
+    } catch (error) {
+      console.error("Failed to revalidate published projects after create", error);
+    }
 
     return NextResponse.json({ data: created }, { status: 201 });
   } catch (error) {

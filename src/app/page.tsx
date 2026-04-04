@@ -26,7 +26,7 @@ export default async function Home() {
 
   try {
     const projectsModule = await createProjectsModule();
-    projects = await projectsModule.listPublishedProjects.execute();
+    projects = await projectsModule.listPublishedProjectsCached();
   } catch (error) {
     hasProjectsLoadError = true;
     console.error("Failed to load projects for home page", error);

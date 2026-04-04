@@ -4,6 +4,7 @@ import {
   buildUnauthorizedResponse,
   getAdminApiContext,
 } from "@/lib/auth/get-admin-api-context";
+import { revalidatePublishedProjectsFeedCache } from "@/modules/projects/infrastructure/cache";
 import { createProjectsModule } from "@/modules/projects/infrastructure/projects-module";
 import { mapProjectErrorToHttp } from "@/modules/projects/presentation/http-errors";
 
@@ -28,6 +29,12 @@ export async function PATCH(request: Request, context: IParams) {
       Boolean(body.isPublished),
       admin.email
     );
+
+    try {
+      revalidatePublishedProjectsFeedCache();
+    } catch (error) {
+      console.error("Failed to revalidate published projects after publish toggle", error);
+    }
 
     return NextResponse.json({ data: project });
   } catch (error) {

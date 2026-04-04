@@ -6,7 +6,7 @@ import { mapProjectErrorToHttp } from "@/modules/projects/presentation/http-erro
 export async function GET() {
   try {
     const projectsModule = await createProjectsModule();
-    const projects = await projectsModule.listPublishedProjects.execute();
+    const projects = await projectsModule.listPublishedProjectsCached();
 
     return NextResponse.json({ data: projects });
   } catch (error) {

@@ -5,6 +5,7 @@ import {
   getAdminApiContext,
 } from "@/lib/auth/get-admin-api-context";
 import type { IUpdateProjectInput } from "@/modules/projects/domain/project";
+import { revalidatePublishedProjectsFeedCache } from "@/modules/projects/infrastructure/cache";
 import { createProjectsModule } from "@/modules/projects/infrastructure/projects-module";
 import { mapProjectErrorToHttp } from "@/modules/projects/presentation/http-errors";
 
@@ -37,6 +38,12 @@ export async function PATCH(request: Request, context: IParams) {
       updatedBy: admin.email,
     });
 
+    try {
+      revalidatePublishedProjectsFeedCache();
+    } catch (error) {
+      console.error("Failed to revalidate published projects after update", error);
+    }
+
     return NextResponse.json({ data: updated });
   } catch (error) {
     const mapped = mapProjectErrorToHttp(error);
@@ -56,6 +63,12 @@ export async function DELETE(_request: Request, context: IParams) {
   try {
     const projectsModule = await createProjectsModule();
     await projectsModule.deleteProject.execute(id, admin.email);
+
+    try {
+      revalidatePublishedProjectsFeedCache();
+    } catch (error) {
+      console.error("Failed to revalidate published projects after delete", error);
+    }
 
     return new Response(null, { status: 204 });
   } catch (error) {
