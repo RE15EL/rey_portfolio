@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { getAdminErrorFeedback } from "@/lib/errors/admin-error-feedback";
 import type { IProject } from "@/modules/projects/domain/project";
 
 interface IAdminProjectFormProps {
@@ -61,23 +62,28 @@ export const AdminProjectForm = ({ mode, project }: IAdminProjectFormProps) => {
       mode === "create" ? "/api/admin/projects" : `/api/admin/projects/${project?.id}`;
     const method = mode === "create" ? "POST" : "PATCH";
 
-    const response = await fetch(endpoint, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const response = await fetch(endpoint, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-    if (!response.ok) {
-      const result = (await response.json()) as { error?: string };
-      setError(result.error || "No fue posible guardar el proyecto");
+      if (!response.ok) {
+        const result = (await response.json()) as { error?: string };
+        setError(getAdminErrorFeedback(response.status, result.error, "saveProject"));
+        return;
+      }
+
+      router.push("/admin");
+      router.refresh();
+    } catch {
+      setError("No pudimos conectar con el servidor. Revisá tu conexión e intentá nuevamente.");
+    } finally {
       setIsSubmitting(false);
-      return;
     }
-
-    router.push("/admin");
-    router.refresh();
   };
 
   return (

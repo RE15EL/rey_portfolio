@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 
+import { getMagicLinkErrorFeedback } from "@/lib/errors/admin-error-feedback";
 import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 
 const defaultEmail = "reiselvalle@gmail.com";
@@ -22,21 +23,25 @@ export const AdminLoginForm = () => {
     const supabase = createBrowserSupabaseClient();
     const redirectTo = `${window.location.origin}/auth/callback?next=/admin`;
 
-    const { error: signInError } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: redirectTo,
-      },
-    });
+    try {
+      const { error: signInError } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: redirectTo,
+        },
+      });
 
-    if (signInError) {
-      setError(signInError.message);
+      if (signInError) {
+        setError(getMagicLinkErrorFeedback(signInError.message));
+        return;
+      }
+
+      setSent(true);
+    } catch {
+      setError("No pudimos iniciar el proceso de acceso. Intentá nuevamente.");
+    } finally {
       setIsSubmitting(false);
-      return;
     }
-
-    setSent(true);
-    setIsSubmitting(false);
   };
 
   return (

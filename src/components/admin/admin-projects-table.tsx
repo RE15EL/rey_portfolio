@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { getAdminErrorFeedback } from "@/lib/errors/admin-error-feedback";
 import type { IProject } from "@/modules/projects/domain/project";
 
 interface IAdminProjectsTableProps {
@@ -19,23 +20,31 @@ export const AdminProjectsTable = ({ projects }: IAdminProjectsTableProps) => {
     setError(null);
     setWorkingId(id);
 
-    const response = await fetch(`/api/admin/projects/${id}/publish`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ isPublished: !isPublished }),
-    });
+    try {
+      const response = await fetch(`/api/admin/projects/${id}/publish`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isPublished: !isPublished }),
+      });
 
-    if (!response.ok) {
-      const result = (await response.json()) as { error?: string };
-      setError(result.error || "No fue posible actualizar el estado");
+      if (!response.ok) {
+        const result = (await response.json()) as { error?: string };
+        setError(
+          getAdminErrorFeedback(response.status, result.error, "togglePublish")
+        );
+        return;
+      }
+
+      router.refresh();
+    } catch {
+      setError(
+        "No pudimos conectar con el servidor para actualizar el estado. Intentá nuevamente."
+      );
+    } finally {
       setWorkingId(null);
-      return;
     }
-
-    setWorkingId(null);
-    router.refresh();
   };
 
   if (!projects.length) {
