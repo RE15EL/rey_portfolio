@@ -152,3 +152,9 @@ Run from: `E:\( programacion )\( proyectos )\portfolio\rey_portfolio`
 - Do not revert unrelated local changes.
 - Keep commits focused when commits are requested.
 - Update this file when toolchain or conventions change.
+
+## Skills
+
+| Skill | Description | Path |
+| --- | --- | --- |
+| `javascript-map-mastery` | High-performance JavaScript Map patterns, decision rules, and safe usage tradeoffs. | [SKILL.md](.agents/skills/javascript-map-mastery/SKILL.md) |
